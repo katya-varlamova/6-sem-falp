@@ -1,0 +1,297 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+%\usepackage[14pt]{extsizes}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+\usepackage{pgfplots}
+\usepackage{filecontents}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{eucal}
+\usepackage{enumitem}
+%s\documentclass[openany]{book}
+\frenchspacing
+
+\usepackage{indentfirst} % Красная строка
+
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+\usepackage{amsmath}
+
+
+% Для листинга кода:
+\lstset{ %
+	language=c,                 % выбор языка для подсветки (здесь это С)
+	basicstyle=\small\sffamily, % размер и начертание шрифта для подсветки кода
+	numbers=left,               % где поставить нумерацию строк (слева\справа)
+	numberstyle=\tiny,           % размер шрифта для номеров строк
+	stepnumber=1,                   % размер шага между двумя номерами строк
+	numbersep=5pt,                % как далеко отстоят номера строк от подсвечиваемого кода
+	showspaces=false,            % показывать или нет пробелы специальными отступами
+	showstringspaces=false,      % показывать или нет пробелы в строках
+	showtabs=false,             % показывать или нет табуляцию в строках
+	frame=single,              % рисовать рамку вокруг кода
+	tabsize=2,                 % размер табуляции по умолчанию равен 2 пробелам
+	captionpos=t,              % позиция заголовка вверху [t] или внизу [b] 
+	breaklines=true,           % автоматически переносить строки (да\нет)
+	breakatwhitespace=false, % переносить строки только если есть пробел
+	escapeinside={\#*}{*)}   % если нужно добавить комментарии в коде
+}
+
+
+\usepackage[left=2cm,right=2cm, top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
+% Для измененных титулов глав:
+\usepackage{titlesec, blindtext, color} % подключаем нужные пакеты
+\definecolor{gray75}{gray}{0.75} % определяем цвет
+\newcommand{\hsp}{\hspace{20pt}} % длина линии в 20pt
+% titleformat определяет стиль
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+
+% plot
+\usepackage{pgfplots}
+\usepackage{filecontents}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+\begin{document}
+	%\def\chaptername{} % убирает "Глава"
+	\thispagestyle{empty}
+	\begin{titlepage}
+		\noindent \begin{minipage}{0.15\textwidth}
+			\includegraphics[width=\linewidth]{b_logo}
+		\end{minipage}
+		\noindent\begin{minipage}{0.9\textwidth}\centering
+			\textbf{Министерство науки и высшего образования Российской Федерации}\\
+			\textbf{Федеральное государственное бюджетное образовательное учреждение высшего образования}\\
+			\textbf{~~~«Московский государственный технический университет имени Н.Э.~Баумана}\\
+			\textbf{(национальный исследовательский университет)»}\\
+			\textbf{(МГТУ им. Н.Э.~Баумана)}
+		\end{minipage}
+		
+		\noindent\rule{18cm}{3pt}
+		\newline\newline
+		\noindent ФАКУЛЬТЕТ $\underline{\text{«Информатика и системы управления»}}$ \newline\newline
+		\noindent КАФЕДРА $\underline{\text{«Программное обеспечение ЭВМ и информационные технологии»}}$\newline\newline\newline\newline\newline
+		
+		\begin{center}
+			\noindent\begin{minipage}{1.1\textwidth}\centering
+				\Large\textbf{  Отчет по лабораторной работе №5}\newline
+				\textbf{по дисциплине <<Функциональное и логическое}\newline
+				\textbf{~~~программирование>>}\newline\newline
+			\end{minipage}
+		\end{center}
+		
+		\noindent\textbf{Тема} $\underline{\text{Использование управляющих структур, работа со списками}}$\newline\newline
+		\noindent\textbf{Студент} $\underline{\text{Варламова Е. А.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}}$\newline\newline
+		\noindent\textbf{Группа} $\underline{\text{ИУ7-61Б~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}}$\newline\newline
+		\noindent\textbf{Оценка (баллы)} $\underline{\text{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}}$\newline\newline
+		\noindent\textbf{Преподаватель} $\underline{\text{Толпинская Н.Б., Строганов Ю. В.~~~~~~~~~~~~~~~~~~~~}}$\newline\newline\newline
+		
+		\begin{center}
+			\vfill
+			Москва~---~\the\year
+			~г.
+		\end{center}
+	\end{titlepage}
+\setcounter{page}{2}
+
+\newpage
+
+\textbf{1.} Написать функцию, которая по своему списку-аргументу lst определяет является ли он палиндромом (то есть равны ли lst и (reverse lst)).\\
+
+\begin{lstlisting}[label=third,caption=Решение задания №1, language=lisp]
+(defun move (lst res)
+(cond ((null lst) res)
+      (t (move (cdr lst) (cons (car lst) res) ))
+) )
+
+(defun my_reverse (lst)
+(move lst ()))
+
+(defun is_eq (lst revlst)
+(cond ((and (null lst) (null revlst)))
+      ( (eq (car lst) (car revlst)) (is_eq (cdr lst) (cdr revlst)) )
+))
+
+(defun is_poly (lst)
+(is_eq lst (my_reverse lst)) )
+\end{lstlisting}
+\textbf{2.} Написать предикат set-equal, который возвращает t, если два его множества аргумента содержат одни и те же элементы, порядок которых не имеет значения.\\
+
+\begin{lstlisting}[label=third,caption=Решение задания №2, language=lisp]
+(defun find_element (el lst)
+(cond
+((null lst) NIL)
+((eql el (car lst)) T)
+(T (find_element el (cdr lst)))))
+
+(defun compare (lst1 lst2)
+(cond
+((null lst1) T)
+((find_element (car lst1) lst2) (compare (cdr lst1) lst2))
+(T NIL)))
+
+(defun are_equal (lst1 lst2) (if (=(length lst1) (length lst2)) (compare lst1 lst2)))
+\end{lstlisting}
+
+\textbf{3.} Напишите свои необходимые функции, которые обрабатывают таблицу из 4-х точечных пар:
+
+(страна . столица), и возвращают по стране - столицу, а по столице — страну .\\
+
+\begin{lstlisting}[label=third,caption=Решение задания №3, language=lisp]
+(defun get_capital (lst country) 
+(reduce #'(lambda (x y) 
+(if (null x)
+(if (eql (car y) country) (cdr y))
+ x)) lst :initial-value Nil))
+
+(defun get_country (lst capital) 
+(reduce #'(lambda (x y) 
+(if (null x)
+(if (eql (cdr y) capital) (car y))
+ x)) lst :initial-value Nil))
+\end{lstlisting}
+
+\textbf{4.}  Напишите функцию swap-first-last, которая переставляет в списке-аргументе первый и
+последний элементы.\\
+\begin{lstlisting}[label=third,caption=Решение задания №4, language=lisp]
+(defun swap-first-last (lst)
+(setf f (car lst))
+(setf nl (get_change_last (cdr lst)))
+(cons l nl)
+)
+
+(defun get_change_last (lst)
+(if (cdr lst)
+(cons (car lst) (get_change_last (cdr lst)))
+((lambda () (setf l (car lst)) (list f) ))
+))
+\end{lstlisting}
+\textbf{5.} Напишите функцию swap-two-ellement, которая переставляет в списке- аргументе два
+указанных своими порядковыми номерами элемента в этом списке.\\
+\begin{lstlisting}[label=third,caption=Решение задания №5, language=lisp]
+(defun without_last_els (lst pos ind)
+(cond 
+( (< ind pos) (cons (car lst) (without_last_els (cdr lst) pos (+ ind 1) )) )
+( (= ind pos) (lambda () 
+(setf tail (cdr lst))
+(cons (car lst) (without_last_els (cdr lst) pos (+ ind 1) ))
+))
+))
+
+(defun f (lst p1 p2 ind)
+(cond 
+( (< ind (- p1 1)) (cons (car lst) (f (cdr lst) p1 p2 (+ ind 1))))
+( (= ind (- p1 1)) (cons (car lst) (append (swap-first-last (without_last_els (cdr lst) p2 p1)) tail) ) )
+))
+
+(defun swap-two-element (lst p1 p2)
+(cond ((< p1 p2) (f lst p1 p2 1))
+( (> p1 p2) (f lst p2 p1 1))
+(T lst)
+))
+\end{lstlisting}
+\textbf{6.} Напишите две функции, swap-to-left и swap-to-right, которые производят одну круговую
+перестановку в списке-аргументе влево и вправо, соответственно.\\
+
+\begin{lstlisting}[label=third,caption=Решение задания №6, language=lisp]
+(defun swap_to_right (lst)
+(setf nl (without_last lst))
+(cons l nl))
+
+(defun without_last (lst)
+(if (cdr lst)
+(cons (car lst) (without_last (cdr lst)))
+((lambda () (setf l (car lst)) nil))
+))
+------------------------------------------
+(defun swap_to_left (lst)
+(append_into_end (cdr lst) (car lst)))
+
+(defun append_into_end (lst val)
+(if (null lst)
+(list val)
+(cons (car lst) (append_into_end (cdr lst) val))
+))
+\end{lstlisting}
+\textbf{7.} . Напишите функцию, которая добавляет к множеству двухэлементных списков новый двухэлементный список, если его там нет.\\
+
+\begin{lstlisting}[label=third,caption=Решение задания №7, language=lisp]
+(defun check_existance (el lst)
+(cond
+((null lst) NIL)
+((and (eql (car el) (caar lst)) (eql (cadr el) (cadar lst)) T))
+(T (check_existance el (cdr lst)))))
+
+(defun add_element (el lst)
+(cond
+((check_existance el lst) lst)
+(T (cons el lst))))
+\end{lstlisting}
+\textbf{8.} Напишите функцию, которая умножает на заданное число-аргумент первый числовой
+элемент списка из заданного 3-х элементного списка-аргумента, когда\\
+
+a) все элементы списка -- числа,
+
+6) элементы списка -- любые объекты\\
+
+a) все элементы списка -- числа\\
+\begin{lstlisting}[label=third,caption=Решение задания №8a, language=lisp]
+(defun mult_only_numbers (num lst)
+(cons (* num (car lst)) (cdr lst)))
+\end{lstlisting}
+
+б) элементы списка -- любые объекты
+
+\begin{lstlisting}[label=third,caption=Решение задания №8б, language=lisp]
+(defun mul_first_num (num lst)
+(setf f (car lst))
+(setf s (cadr lst))
+(setf th (caddr lst))
+(cond
+((numberp f) (cons (* num f) (cdr lst) ))
+((numberp s) (list f (* num s) th ))
+((numberp th) (list f s (* num th)))
+(T lst)))
+\end{lstlisting}
+
+\textbf{9.}  Напишите функцию, select-between, которая из списка-аргумента из 5 чисел выбирает только те, которые расположены между двумя указанными границами-аргументами и
+возвращает их в виде списка (упорядоченного по возрастанию списка чисел (+ 2 балла)).\\
+\begin{lstlisting}[label=third,caption=Решение задания №9, language=lisp]
+(defun check_borders (x1 x2 el) (and (> el x1) (< el x2)))
+
+(defun select_between (lst x1 x2)
+(cond
+((null lst) NIL)
+( (check_borders x1 x2 (car lst)) (cons (car lst) (select_between (cdr lst) x1 x2)) )
+(T (select_between (cdr lst) x1 x2))))
+\end{lstlisting}
+
+\section*{Контрольные вопросы}
+\textbf{1. Структуроразрушающие и не разрушающие структуру списка функции.}\\
+
+\textbf{Ответ.} 
+Функции, реализующие опреации со списками, делятся на две группы:
+\begin{enumerate}
+    \item не разрушающие структуру функции; данные функции не меняют переданный им объект-аргумент, а создают копию, с которой в дальнейшем производят необходимые преобразования; к таким функциям относятся: append, reverse, last, nth, nthcdr, length, remove, subst и др.
+    \item структуроразрушающие функции; данные функции меняют сам объект-аргумент, из-за чего теряется возможность работать с исходным списком; чаще всего имя структуроразрушающих функций начинается с префикса -n: nreverse, nconc, nsubst и др.
+\end{enumerate}
+
+Обычно в Lisp существуют функции-дубли, которые реализуют одно и то же преобразование, но по разному (с сохранением структуры и без): apppend/nconc, reverse/nreverse и т.д.\\
+
+
+\textbf{2. Отличие в работе функций cons, list, append, nconc и в их результате.}\\
+
+\textbf{Ответ.}
+Функция \textbf{cons} - чисто математическая, она принимает ровно 2 аргумента, создает бианрный узел и расставляет указатели (car - на первый аргумент, cdr - на второй). В результате работы функции может получится как точечная пара, так и список (зависит от второго аргумента).\\
+
+Функция \textbf{list} - это форма, она принимает произвольное количество аргументов и создает из них список. В отличии от функции cons, list создает столько бинарных узлов, сколько передано ей аргументов, и связывает их вместе. Результатом работы данной функции всегда будет список.\\
+
+Функция \textbf{append} также является формой. Она принимает на вход произвольное число аргументов. Для всех аргументов, кроме последнего, эта функция создает копию, ссылая при этом последний элемент каждого списка аргумента на первый элемент следующего по порядку списка аргумента. В результате работы функции append может получится как список, так и точечная пара (зависит от последнего аргумента). \\
+
+Итого: \textbf{cons} создает однин бинарный узел, \textbf{list} создает столько бинарных узлов, сколько передано аргументов, \textbf{append} cоздает копии всех бинарных узлов для каждого из аргументов, исключая последний аргумент.\\
+\end{document}
